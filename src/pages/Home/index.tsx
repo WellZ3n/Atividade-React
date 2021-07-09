@@ -33,12 +33,6 @@ interface Pokemon{
   }
 };
 
-interface Tipo{
-  type:{
-    name: string;
-  }
-}
-
 const Home: React.FC = () => {
   const [newPoke, setNewPoke] = useState('');
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
@@ -57,7 +51,7 @@ const Home: React.FC = () => {
     <>
     <Title>Pokédex</Title>
 
-  <Form onSubmit={handleAddRepository}>
+  <Form onSubmit={handleAddRepository} id="pesquisa">
     <input
     value={newPoke}
     onChange={e => setNewPoke(e.target.value)}
@@ -67,12 +61,15 @@ const Home: React.FC = () => {
 
    <Pokemons>
    {pokemons.map(pokemon => (
-                  <a href={pokemon.name}>
+                  <a href={pokemon.name} id="main">
                     <img src={pokemon.sprites.front_default} alt = 'Sprite'/>
                     <div>
-                        <strong>Name: {pokemon.name}</strong><br></br>
-                        <strong>Id: {pokemon.id}</strong>
-                        <p>Types: {pokemon.types[0].type.name}</p>
+                        <strong>Name: {pokemon.name}</strong>
+                        <br/><br/>
+                        <p>Id: {pokemon.id}</p>
+                        <p>Type: {pokemon.types.map(p => (
+                            <span>{p.type.name} </span>
+                          ))}</p>
                         <p>Version: {pokemon.moves[0].version_group_details[0].version_group.name}</p>
                     </div>
                   </a>))}

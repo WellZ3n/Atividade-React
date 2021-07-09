@@ -2,17 +2,21 @@ import styled from 'styled-components';
 import { shade } from 'polished';
 
 export const Title = styled.h1`
+  margin-left: 25px;
+  float: left;
   color: #f5f5f5;
   font-size: 48px;
-  max-width: 450px;
+  max-width: 300px;
   line-height: 56px;
 
-  margin-top: 80px;
+  margin-top: 0px;
 `;
 
 export const Form = styled.form`
-  margin-top: 40px;
+  margin-left: 550px;
   max-width: 700px;
+  margin-top: 80px;
+  margin-right: 50px;
 
   display: flex;
 
@@ -48,33 +52,30 @@ export const Form = styled.form`
 
 export const Pokemons = styled.div`
   margin-top: 80px;
-  max-width: 700px;
+  max-width: 100%;
 
   a {
-
+    float: left;
+    margin-left: 2%;
+    margin-bottom: 1%;
     background: #fff;
-    border-radius: 5px;
-    width: 100%;
-    padding: 24px;
+    border-radius: 10px;
+    width: 30%;
+    padding: 5px;
     display: block;
     text-decoration: none;
     display: flex;
     align-items: center;
 
-    transition: transform 0.2s;
+    transition: transform 0.5s;
 
     &:hover {
-      transform: translate(10);
-    }
-
-    & + a {
-      margin-top: 16px;
+      transform: translate(15px);
     }
 
   img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
+    width: 100px;
+    height: 100px;
   }
 
   div {
