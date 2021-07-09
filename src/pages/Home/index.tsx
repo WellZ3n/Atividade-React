@@ -1,72 +1,83 @@
 import React, { useState, FormEvent } from 'react';
+import api from '../../services/api';
 
-import { FiChevronRight } from 'react-icons/fi';
+import { Title, Pokemons, Form } from './styles';
 
-import { Title, Carteiras, Form } from './styles';
+interface Pokemon{
 
-interface Carteiras{
-  nome: string;
-  atividade_principal: string;
-  email: string;
-  uf: string;
-  municipio: string;
-  cnpj: string;
+  id: string;
+  name: string;
+  forms: {
+    url: string;
+  };
+
+  types: [{
+    type:{
+      name: string;
+    }
+  }
+];
+
+  moves:[{
+    version_group_details: [{
+      version_group:{
+        name: string;
+        }
+      }
+    ]
+  }
+];
+
+  sprites:{
+    front_default: string;
+  }
+};
+
+interface Tipo{
+  type:{
+    name: string;
+  }
 }
 
 const Home: React.FC = () => {
-  const [newRepo, setNewRepo] = useState('');
+  const [newPoke, setNewPoke] = useState('');
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
   async function handleAddRepository(event: FormEvent<HTMLFormElement>,): Promise<void> {
     event.preventDefault();
 
-    setNewRepo('');
+    const response = await api.get<Pokemon>(`pokemon/${newPoke}`);
+    const pokemon = response.data;
+    setPokemons([...pokemons, pokemon]);
+
+    setNewPoke('');
   };
 
   return (
     <>
-    <Title>Lista de CNPJ</Title>
+    <Title>Pokédex</Title>
 
   <Form onSubmit={handleAddRepository}>
     <input
-    value={newRepo}
-    onChange={e => setNewRepo(e.target.value)}
-    placeholder="Digite o nome do repositório" />
+    value={newPoke}
+    onChange={e => setNewPoke(e.target.value)}
+    placeholder="Digite o nome do Pokémon" />
       <button type="submit">Pesquisar</button>
   </Form>
 
-   <Carteiras>
-                  <a href="teste">
-
+   <Pokemons>
+   {pokemons.map(pokemon => (
+                  <a href={pokemon.name}>
+                    <img src={pokemon.sprites.front_default} alt = 'Sprite'/>
                     <div>
-                        <strong>Git-Repo</strong>
-                        <p>Meu primeiro projeto em React (05/07/2021)</p>
+                        <strong>Name: {pokemon.name}</strong><br></br>
+                        <strong>Id: {pokemon.id}</strong>
+                        <p>Types: {pokemon.types[0].type.name}</p>
+                        <p>Version: {pokemon.moves[0].version_group_details[0].version_group.name}</p>
                     </div>
-                  </a>
+                  </a>))}
 
-    {/**repositories.map(repository => (
-                    <a>
-                    <img
-                        src={repository.owner.avatar_url}
-                        alt={repository.owner.login}
-                    />
-                    <div>
-                        <strong>{repository.full_name}</strong>
-                        <p>{repository.description}</p>
-                    </div>
-                    </a>
-    ))**/}
-                    <a href="teste">
-
-                     <div>
-                        <strong>Nome: </strong>
-                        <p>Atividade: </p>
-                        <p>Email: </p>
-                        <p>UF: </p>
-                        <p>Município: </p>
-                        <p>CNPJ: </p>
-                     </div>
-                  </a>
-          </Carteiras>
+          </Pokemons>
      </>
     );
 };

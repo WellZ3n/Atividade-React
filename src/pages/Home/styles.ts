@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { shade } from 'polished';
 
 export const Title = styled.h1`
-  color: #3a3a3a;
+  color: #f5f5f5;
   font-size: 48px;
   max-width: 450px;
   line-height: 56px;
@@ -32,7 +32,7 @@ export const Form = styled.form`
   button {
     width: 210px;
     height: 70px;
-    background: #04d361;
+    background: #a10000;
     border-radius: 0 5px 5px 0;
     border: 0;
     color: #fff;
@@ -41,12 +41,12 @@ export const Form = styled.form`
     transition: background-color 0.2s;
 
     &:hover {
-      background: ${shade(0.2, '#04d361')}
+      background: ${shade(0.2, '#940000')}
     }
   }
 `;
 
-export const Carteiras = styled.div`
+export const Pokemons = styled.div`
   margin-top: 80px;
   max-width: 700px;
 
@@ -72,13 +72,14 @@ export const Carteiras = styled.div`
     }
 
   img {
-    width: 64px;
-    height: 64px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
   }
 
   div {
     margin: 0 16px;
+    flex: 1;
 
     strong{
       font-size: 20px;
