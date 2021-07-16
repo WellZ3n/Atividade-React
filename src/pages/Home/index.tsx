@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import api from '../../services/api';
 
 import { Title, Pokemons, Form, Error } from './styles';
@@ -30,7 +30,23 @@ version_group: {
 const Home: React.FC = () => {
   const [newPoke, setNewPoke] = useState('');
   const [inputError, setInputError] = useState('');
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const [pokemons, setPokemons] = useState<Pokemon[]>(() => {
+    const storagePokemons = localStorage.getItem(
+      '@Pokedex:pokemons'
+      );
+
+      if(storagePokemons){
+          return JSON.parse(storagePokemons)
+      }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      '@Pokedex:pokemons',
+      JSON.stringify(pokemons)
+    )
+  }, [pokemons]);
 
   async function handleAddRepository(event: FormEvent<HTMLFormElement>,): Promise<void> {
     event.preventDefault();
