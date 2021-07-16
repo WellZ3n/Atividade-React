@@ -1,9 +1,13 @@
 import React, { useState, FormEvent } from 'react';
 import api from '../../services/api';
 
-import { Title, Pokemons, Form } from './styles';
+import { Title, Pokemons, Form, Error } from './styles';
 
 interface Pokemon{
+
+version_group: {
+    name: string;
+  },
 
   id: string;
   name: string;
@@ -18,16 +22,6 @@ interface Pokemon{
   }
 ];
 
-  moves:[{
-    version_group_details: [{
-      version_group:{
-        name: string;
-        }
-      }
-    ]
-  }
-];
-
   sprites:{
     front_default: string;
   }
@@ -35,23 +29,34 @@ interface Pokemon{
 
 const Home: React.FC = () => {
   const [newPoke, setNewPoke] = useState('');
+  const [inputError, setInputError] = useState('');
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
   async function handleAddRepository(event: FormEvent<HTMLFormElement>,): Promise<void> {
     event.preventDefault();
 
-    const response = await api.get<Pokemon>(`pokemon/${newPoke}`);
-    const pokemon = response.data;
-    setPokemons([...pokemons, pokemon]);
+    if(!newPoke){
+      setInputError("Digite um pokémon/id para pesquisar.");
+      return;
+    }
+    try {
+      const response = await api.get<Pokemon>(`pokemon-form/${newPoke}/`);
+      const pokemon = response.data;
 
-    setNewPoke('');
+      setPokemons([...pokemons, pokemon]);
+      setNewPoke('');
+      setInputError('');
+
+    } catch (err) {
+      setInputError ("Pokémon não encontrado ou inexistente")
+    }
   };
 
   return (
     <>
     <Title>Pokédex</Title>
 
-  <Form onSubmit={handleAddRepository} id="pesquisa">
+  <Form hasError= { !!inputError } onSubmit={handleAddRepository}>
     <input
     value={newPoke}
     onChange={e => setNewPoke(e.target.value)}
@@ -59,9 +64,11 @@ const Home: React.FC = () => {
       <button type="submit">Pesquisar</button>
   </Form>
 
+  {inputError && <Error>{inputError}</Error>}
+
    <Pokemons>
    {pokemons.map(pokemon => (
-                  <a href={pokemon.name} id="main">
+                  <a key={pokemon.name} href={"https://www.pokemon.com/br/pokedex/" + pokemon.id} id="main">
                     <img src={pokemon.sprites.front_default} alt = 'Sprite'/>
                     <div>
                         <strong>Name: {pokemon.name}</strong>
@@ -70,7 +77,7 @@ const Home: React.FC = () => {
                         <p>Type: {pokemon.types.map(p => (
                             <span>{p.type.name} </span>
                           ))}</p>
-                        <p>Version: {pokemon.moves[0].version_group_details[0].version_group.name}</p>
+                        <p>Version: {pokemon.version_group.name}</p>
                     </div>
                   </a>))}
 
